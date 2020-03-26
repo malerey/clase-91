@@ -1,24 +1,24 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
 
-function App() {
+const App = () => {
+
+  const handleClick = tareaABorrar => {
+    console.log(tareaABorrar)
+
+    listaDeTareas = listaDeTareas.filter(tarea => tarea !== tareaABorrar)
+    console.log(listaDeTareas)
+  }
+
+let listaDeTareas = ["Planchar", "Lavar", "Llorar en la ducha", "Alimentar al gato", "Ponerle 250cc de tequila al idem"]
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      {listaDeTareas.map((tarea, i) => (
+        <div key={i}>
+        <span>{tarea}</span>
+        <button onClick={() => handleClick(tarea)}>Borrar tarea</button>
+        </div>
+      ))}
     </div>
   );
 }
