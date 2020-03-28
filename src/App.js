@@ -3,22 +3,67 @@ import './App.css';
 
 const App = () => {
 
-  const handleClick = tareaABorrar => {
-    console.log(tareaABorrar)
+  const Button = () => <button>Registrarse a nuestro newsletter</button>
 
-    listaDeTareas = listaDeTareas.filter(tarea => tarea !== tareaABorrar)
-    console.log(listaDeTareas)
+  const Tarea = ({ tarea, i }) => (
+    <li className={tarea.completada ? 'completada' : ''}>
+      {tarea.nombre}
+      <button onClick={() => handleEraseClick(i)}>x</button>
+      <button onClick={() => handleCompleteClick(i)}>Marcar como completada</button>
+    </li>
+  )
+
+  const [tareas, setTareas] = useState([
+    {nombre: "Conectarse a la clase", completada: true},
+    {nombre: "No trabajar durante la clase",completada: true},
+    {nombre: "Halagar los fondos creativos de la profesora", completada: false},
+    {nombre: "Ganarse el pan de cada dia", completada: false},
+    {nombre: "Ganar el bingo", completada: false},
+    {nombre: "Salvar el mundo", completada: false},
+  ])
+
+  const [ nuevaTarea, setNuevaTarea ] = useState('') 
+
+  const handleCompleteClick = indiceTareaACompletar => {
+    const tareasModificadas = tareas.map((tarea, i) => {
+      tarea.completada = i === indiceTareaACompletar ? !tarea.completada : tarea.completada
+      return tarea
+    })
+    setTareas(tareasModificadas)
   }
 
-let listaDeTareas = ["Planchar", "Lavar", "Llorar en la ducha", "Alimentar al gato", "Ponerle 250cc de tequila al idem"]
+  const handleEraseClick = indiceTareaABorrar => {
+    setTareas(tareas.filter((tarea, i) => i !== indiceTareaABorrar))
+  }
+
+  const handleChange = e => {
+    setNuevaTarea(e.target.value)
+  }
+
+  const handleSubmit = e => {
+    e.preventDefault()
+    const listaDeTareas = tareas
+    const objeto = {
+      nombre: nuevaTarea,
+      completada: false,
+    }
+    listaDeTareas.push(objeto)
+    setTareas(listaDeTareas)
+  }
+
+
+  console.log(tareas)
   return (
-    <div>
-      {listaDeTareas.map((tarea, i) => (
-        <div key={i}>
-        <span>{tarea}</span>
-        <button onClick={() => handleClick(tarea)}>Borrar tarea</button>
-        </div>
-      ))}
+    <div className="app">
+      <ul>
+        {tareas.map((tarea, i) => <Tarea key={i} tarea={tarea} i={i} />)}
+      </ul>
+
+      <form onSubmit={handleSubmit}>
+        <input type="text" placeholder="Agregar una tarea..." onChange={handleChange}/>
+        <input type="submit" value="Agregar" />
+      </form> 
+      <Button />
     </div>
   );
 }
